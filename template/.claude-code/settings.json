@@ -25,22 +25,6 @@
       "Bash(sudo rm -rf *)"
     ]
   },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '✨ File modified'"
-          }
-        ]
-      }
-    ]
-  },
-  "env": {
-    "CLAUDE_CODE_PROJECT": "{{PROJECT_NAME}}"
-  },
   "cleanupPeriodDays": 30,
   "includeCoAuthoredBy": true
 }
