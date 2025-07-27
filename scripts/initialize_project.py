@@ -138,6 +138,7 @@ class ProjectInitializer:
             'pyproject.toml',
             'setup.py',
             '.mcp.json',
+            '.claude-code/settings.json',
             'src/*/__init__.py',
             'tests/conftest.py',
             'docs/source/index.md'
@@ -146,7 +147,6 @@ class ProjectInitializer:
         for pattern in files_to_customize:
             for file_path in self.project_dir.glob(pattern):
                 if file_path.is_file():
-                    print(f"  Customizing: {file_path}")
                     self.replace_in_file(file_path, replacements)
         
         print("✅ Files customized")
@@ -158,18 +158,10 @@ class ProjectInitializer:
             
             for placeholder, value in replacements.items():
                 if value is not None:  # Only replace if value is not None
-                    # Count occurrences before replacement
-                    count1 = content.count('{{' + placeholder + '}}')
-                    count2 = content.count('${' + placeholder + '}')
-                    count3 = content.count('{' + placeholder + '}')
-                    
                     # Replace different placeholder formats
                     content = content.replace('{{' + placeholder + '}}', value)     # {{VAR}}
                     content = content.replace('${' + placeholder + '}', value)      # ${VAR}
                     content = content.replace('{' + placeholder + '}', value)       # {VAR}
-                    
-                    if count1 > 0 or count2 > 0 or count3 > 0:
-                        print(f"    Replaced {placeholder}: {{{{}}}}={count1}, ${{}}={count2}, {{}}={count3}")
             
             file_path.write_text(content, encoding='utf-8')
         except Exception as e:

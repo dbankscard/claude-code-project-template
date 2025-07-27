@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls*)",
+      "Bash(pwd)",
+      "Bash(cd *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(mkdir *)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git show*)",
+      "Bash(pytest*)",
+      "Bash(python -m pytest*)",
+      "Bash(npm test*)",
+      "Bash(npm run test*)",
+      "Bash(yarn test*)",
+      "Bash(echo *)",
+      "Bash(which *)",
+      "Bash(pip list*)",
+      "Bash(pip show*)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo rm -rf *)"
+    ]
+  },
+  "cleanupPeriodDays": 30,
+  "includeCoAuthoredBy": true
+}
