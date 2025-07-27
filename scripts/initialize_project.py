@@ -86,7 +86,8 @@ class ProjectInitializer:
         
         # Copy all template files
         for item in self.template_dir.iterdir():
-            if item.name.startswith('.git'):
+            # Skip .git directory but allow other hidden files/directories
+            if item.name == '.git':
                 continue
                 
             dest = self.project_dir / item.name

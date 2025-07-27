@@ -1,0 +1,31 @@
+{
+  "autoApprovedCommands": [
+    "ls",
+    "pwd",
+    "cd",
+    "cat",
+    "head",
+    "tail",
+    "grep",
+    "rg",
+    "find",
+    "mkdir",
+    "git status",
+    "git diff",
+    "git log",
+    "npm test",
+    "npm run test",
+    "yarn test",
+    "pytest",
+    "python -m pytest"
+  ],
+  "bashHook": {
+    "enabled": false,
+    "command": "",
+    "requireConfirmation": true
+  },
+  "editor": {
+    "defaultIndent": 2,
+    "tabsToSpaces": true
+  }
+}
