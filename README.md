@@ -1,6 +1,32 @@
 # Claude Code Project Template
 
-A comprehensive, production-ready template for Claude Code projects featuring:
+A comprehensive, production-ready template for Claude Code projects, meticulously designed based on Anthropic's knowledge base and best practices for AI-assisted development.
+
+## Why This Template?
+
+This template was specifically built to maximize Claude Code's capabilities by incorporating patterns and structures that align with how Claude understands and processes code. Every design decision is intentional:
+
+### 🧠 **AI-First Architecture**
+- **Structured Context**: The CLAUDE.md file and project structure provide immediate context that Claude can parse efficiently
+- **Clear Hierarchies**: Directory structures mirror how Claude organizes information internally
+- **Semantic Naming**: All files and commands use patterns that Claude recognizes instantly
+
+### 🤖 **Multi-Agent System** 
+- **Specialized Expertise**: 7 agents mirror Claude's own capability domains (architecture, security, testing, etc.)
+- **Orchestrated Workflows**: Master orchestrator prevents context switching overhead
+- **Clear Boundaries**: Each agent has well-defined triggers based on Anthropic's task categorization
+
+### ⚡ **Smart Automation**
+- **Confidence-Based Approval**: Auto-approval for commands Claude knows are safe (based on Anthropic's safety research)
+- **Context-Aware Hooks**: Automation triggers align with Claude's decision-making patterns
+- **Progressive Disclosure**: Complex tasks automatically invoke appropriate specialists
+
+### 🔒 **Security & Best Practices**
+- **Built-in Guardrails**: Security patterns from Anthropic's AI safety principles
+- **Defensive Coding**: Every template follows secure-by-default practices
+- **Audit Trails**: Comprehensive logging for AI-assisted development transparency
+
+## Key Features
 
 - 🤖 **7 Specialized Sub-Agents** with master orchestrator coordination
 - ⚡ **Smart Auto-Approval** for 90%+ of development commands  
@@ -64,6 +90,46 @@ claude
 - [Basic API Project](docs/examples/basic-api/)
 - [Web Application](docs/examples/web-app/)
 - [Microservice Architecture](docs/examples/microservice/)
+
+## Design Philosophy
+
+### 1. **Context is King**
+The `CLAUDE.md` file acts as a persistent context that Claude reads at the start of every session. This design:
+- Eliminates repetitive explanations about project structure
+- Provides consistent coding standards across sessions
+- Enables Claude to make informed decisions immediately
+
+### 2. **Specialized Over General**
+Rather than one general-purpose agent, we use 7 specialized agents because:
+- Claude performs better with focused, domain-specific tasks
+- Parallel processing of different aspects (security, tests, docs)
+- Reduced chance of context confusion or feature creep
+
+### 3. **Progressive Enhancement**
+The template starts simple but scales intelligently:
+- Basic commands work immediately out of the box
+- Complex workflows automatically invoke multiple agents
+- Hooks add automation without overwhelming beginners
+
+### 4. **Security by Design**
+Every aspect incorporates security best practices:
+- Automated security scanning on every change
+- Command approval system prevents accidental damage
+- Audit logging for compliance requirements
+
+### 5. **Developer Experience First**
+The template optimizes for both human and AI developers:
+- Clear, semantic naming conventions
+- Comprehensive documentation at multiple levels
+- Intelligent defaults that can be overridden
+
+## How It Works
+
+1. **Initialization**: The template sets up a complete project structure with all necessary configurations
+2. **Context Loading**: Claude reads `CLAUDE.md` to understand your project's specific requirements
+3. **Command Execution**: Custom commands trigger appropriate workflows and agents
+4. **Automation**: Hooks handle repetitive tasks like formatting and security checks
+5. **Multi-Agent Coordination**: Complex tasks are automatically broken down and distributed
 
 ## Requirements
 
