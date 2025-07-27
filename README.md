@@ -25,59 +25,67 @@ claude
 
 # 4. Try your first command
 > /dev:feature user authentication with OAuth2
-Features
-🤖 Sub-Agent Ecosystem
+```
 
-Master Orchestrator: Coordinates complex multi-agent workflows
-Planning Architect: Technical design and architecture planning
-Code Reviewer: Quality assurance and best practices enforcement
-Test Engineer: Comprehensive testing strategy and automation
-Security Auditor: Security compliance and vulnerability assessment
-Documentation Specialist: Technical documentation and API docs
-Performance Optimizer: Performance analysis and optimization
+## Features
 
-⚡ Smart Automation
+### 🤖 Sub-Agent Ecosystem
 
-Auto-Approval System: Safe commands (ls, git, grep) execute instantly
-Intelligent Hooks: Automatic code formatting, quality checks, security scans
-Context-Aware Triggering: Right sub-agent for the right task automatically
+- **Master Orchestrator**: Coordinates complex multi-agent workflows
+- **Planning Architect**: Technical design and architecture planning
+- **Code Reviewer**: Quality assurance and best practices enforcement
+- **Test Engineer**: Comprehensive testing strategy and automation
+- **Security Auditor**: Security compliance and vulnerability assessment
+- **Documentation Specialist**: Technical documentation and API docs
+- **Performance Optimizer**: Performance analysis and optimization
 
-🎯 Custom Commands
+### ⚡ Smart Automation
 
-Development: /dev:feature, /dev:review, /dev:test, /dev:debug, /dev:refactor
-Project: /project:plan, /project:deploy, /project:docs, /project:status
-Git: /git:commit, /git:pr, /git:release, /git:hotfix
-Security: /security:audit, /security:scan, /security:compliance
+- **Auto-Approval System**: Safe commands (ls, git, grep) execute instantly
+- **Intelligent Hooks**: Automatic code formatting, quality checks, security scans
+- **Context-Aware Triggering**: Right sub-agent for the right task automatically
 
-Documentation
+### 🎯 Custom Commands
 
-Getting Started Guide
-Complete Usage Guide
-Customization Instructions
-Troubleshooting
+- **Development**: `/dev:feature`, `/dev:review`, `/dev:test`, `/dev:debug`, `/dev:refactor`
+- **Project**: `/project:plan`, `/project:deploy`, `/project:docs`, `/project:status`
+- **Git**: `/git:commit`, `/git:pr`, `/git:release`, `/git:hotfix`
+- **Security**: `/security:audit`, `/security:scan`, `/security:compliance`
 
-Examples
+## Documentation
 
-Basic API Project
-Web Application
-Microservice Architecture
+- [Getting Started Guide](docs/guides/getting-started.md)
+- [Complete Usage Guide](docs/guides/usage.md)
+- [Customization Instructions](docs/guides/customization.md)
+- [Troubleshooting](docs/guides/troubleshooting.md)
 
-Requirements
+### Examples
 
-Python 3.12+
-Claude Code CLI
-Git
-(Optional) Docker for containerized development
+- [Basic API Project](docs/examples/basic-api/)
+- [Web Application](docs/examples/web-app/)
+- [Microservice Architecture](docs/examples/microservice/)
 
-Contributing
-See CONTRIBUTING.md for contribution guidelines.
-License
-MIT License - see LICENSE for details.
-Support
+## Requirements
 
-📖 Documentation
-🐛 Report Issues
-💬 Discussions
+- Python 3.12+
+- Claude Code CLI
+- Git
+- (Optional) Docker for containerized development
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Support
+
+- 📖 [Documentation](docs/)
+- 🐛 [Report Issues](https://github.com/dbankscard/claude-code-project-template/issues)
+- 💬 [Discussions](https://github.com/dbankscard/claude-code-project-template/discussions)
+
+---
 
 Transform your development workflow with AI-coordinated, automated, and consistently high-quality code development.
