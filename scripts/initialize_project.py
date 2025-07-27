@@ -137,7 +137,7 @@ class ProjectInitializer:
             'pyproject.toml',
             'setup.py',
             '.mcp.json',
-            'src/*/\__init__.py',
+            'src/*/__init__.py',
             'tests/conftest.py',
             'docs/source/index.md'
         ]
@@ -155,8 +155,9 @@ class ProjectInitializer:
             content = file_path.read_text(encoding='utf-8')
             
             for placeholder, value in replacements.items():
-                content = content.replace(f'{{{{{placeholder}}}}}', value)
-                content = content.replace(f'${{{placeholder}}}', value)
+                if value is not None:  # Only replace if value is not None
+                    content = content.replace(f'{{{{{placeholder}}}}}', value)
+                    content = content.replace(f'${{{placeholder}}}', value)
             
             file_path.write_text(content, encoding='utf-8')
         except Exception as e:
@@ -166,6 +167,7 @@ class ProjectInitializer:
         """Initialize git repository"""
         print("🔗 Initializing git repository...")
         
+        original_dir = os.getcwd()
         os.chdir(self.project_dir)
         
         # Initialize repo
@@ -184,23 +186,27 @@ class ProjectInitializer:
         # Create main branch
         subprocess.run(['git', 'branch', '-M', 'main'], capture_output=True)
         
+        os.chdir(original_dir)
         print("✅ Git repository initialized")
     
     def create_virtual_environment(self):
         """Create Python virtual environment"""
         print("🐍 Creating virtual environment...")
         
+        original_dir = os.getcwd()
         os.chdir(self.project_dir)
         
         # Create venv
         subprocess.run([sys.executable, '-m', 'venv', 'venv'], check=True)
         
+        os.chdir(original_dir)
         print("✅ Virtual environment created")
     
     def install_dependencies(self):
         """Install project dependencies"""
         print("📦 Installing dependencies...")
         
+        original_dir = os.getcwd()
         os.chdir(self.project_dir)
         
         # Determine pip path
@@ -229,6 +235,7 @@ class ProjectInitializer:
         if (self.project_dir / 'setup.py').exists():
             subprocess.run([str(pip_path), 'install', '-e', '.'], capture_output=True)
         
+        os.chdir(original_dir)
         print("✅ Dependencies installed")
     
     def generate_documentation(self):
