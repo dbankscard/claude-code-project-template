@@ -138,6 +138,7 @@ class ProjectInitializer:
             'pyproject.toml',
             'setup.py',
             '.mcp.json',
+            '.claude-code/settings.json',
             'src/*/__init__.py',
             'tests/conftest.py',
             'docs/source/index.md'

@@ -5,58 +5,36 @@
       "args": [
         "/path/to/@modelcontextprotocol/server-filesystem/dist/index.js",
         "."
-      ]
+      ],
+      "_comment": "Install with: npm install -g @modelcontextprotocol/server-filesystem"
     },
     "github": {
-      "command": "node",
+      "command": "node", 
       "args": [
         "/path/to/@modelcontextprotocol/server-github/dist/index.js"
       ],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
-      }
-    },
-    "gemini": {
-      "command": "node",
-      "args": [
-        "/path/to/gemini-mcp-server/build/index.js"
-      ],
-      "env": {
-        "GOOGLE_AI_API_KEY": "${GEMINI_API_KEY}"
-      }
-    },
-    "context7": {
-      "command": "node",
-      "args": [
-        "/path/to/context7-mcp-server/dist/index.js"
-      ]
+      },
+      "_comment": "Install with: npm install -g @modelcontextprotocol/server-github. Set GITHUB_TOKEN in your environment."
     }
   },
-  "projectContext": {
-    "name": "{{PROJECT_NAME}}",
-    "description": "{{PROJECT_DESCRIPTION}}",
-    "primaryLanguage": "python",
-    "contextFiles": [
-      "CLAUDE.md",
-      "README.md",
-      "pyproject.toml"
+  "_instructions": {
+    "setup": [
+      "1. Install MCP servers you want to use (e.g., npm install -g @modelcontextprotocol/server-filesystem)",
+      "2. Update the paths in this file to point to the installed servers",
+      "3. Set required environment variables (e.g., export GITHUB_TOKEN=your_token)",
+      "4. Remove servers you don't need from this configuration"
     ],
-    "excludePatterns": [
-      "venv/",
-      "__pycache__/",
-      "*.pyc",
-      ".git/",
-      "node_modules/",
-      "dist/",
-      "build/",
-      ".pytest_cache/",
-      "htmlcov/"
-    ]
-  },
-  "automationRules": {
-    "autoTriggerAgents": true,
-    "codeReviewThreshold": 5,
-    "testGenerationEnabled": true,
-    "securityScanOnCommit": true
+    "optional_servers": {
+      "gemini": {
+        "install": "Follow instructions at: https://github.com/your-gemini-server",
+        "env": "GEMINI_API_KEY"
+      },
+      "context7": {
+        "install": "npm install -g context7-mcp-server",
+        "env": "None required"
+      }
+    }
   }
 }

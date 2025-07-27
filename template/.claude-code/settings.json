@@ -1,31 +1,46 @@
 {
-  "autoApprovedCommands": [
-    "ls",
-    "pwd",
-    "cd",
-    "cat",
-    "head",
-    "tail",
-    "grep",
-    "rg",
-    "find",
-    "mkdir",
-    "git status",
-    "git diff",
-    "git log",
-    "npm test",
-    "npm run test",
-    "yarn test",
-    "pytest",
-    "python -m pytest"
-  ],
-  "bashHook": {
-    "enabled": false,
-    "command": "",
-    "requireConfirmation": true
+  "permissions": {
+    "allow": [
+      "Bash(ls*)",
+      "Bash(pwd)",
+      "Bash(cd *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(mkdir *)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(pytest*)",
+      "Bash(python -m pytest*)",
+      "Bash(npm test*)",
+      "Bash(npm run test*)",
+      "Bash(yarn test*)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo rm -rf *)"
+    ]
   },
-  "editor": {
-    "defaultIndent": 2,
-    "tabsToSpaces": true
-  }
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '✨ File modified'"
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_PROJECT": "{{PROJECT_NAME}}"
+  },
+  "cleanupPeriodDays": 30,
+  "includeCoAuthoredBy": true
 }
