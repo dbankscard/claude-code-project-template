@@ -1,36 +1,100 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(ls*)",
-      "Bash(pwd)",
-      "Bash(cd *)",
-      "Bash(cat *)",
-      "Bash(head *)",
-      "Bash(tail *)",
-      "Bash(grep *)",
-      "Bash(rg *)",
-      "Bash(find *)",
-      "Bash(mkdir *)",
-      "Bash(git status*)",
-      "Bash(git diff*)",
-      "Bash(git log*)",
-      "Bash(git branch*)",
-      "Bash(git show*)",
-      "Bash(pytest*)",
-      "Bash(python -m pytest*)",
-      "Bash(npm test*)",
-      "Bash(npm run test*)",
-      "Bash(yarn test*)",
-      "Bash(echo *)",
-      "Bash(which *)",
-      "Bash(pip list*)",
-      "Bash(pip show*)"
+  "project": {
+    "name": "{{PROJECT_NAME}}",
+    "type": "python",
+    "version": "0.1.0"
+  },
+  "hooks": {
+    "postToolUse": [
+      {
+        "tool": "Edit",
+        "command": ".claude/hooks/auto-format.sh ${file_path}",
+        "description": "Auto-format edited files"
+      },
+      {
+        "tool": "Edit",
+        "command": ".claude/hooks/security-check.py file ${file_path}",
+        "description": "Security validation on file edits"
+      },
+      {
+        "tool": "Edit",
+        "command": ".claude/hooks/test-automation.py ${file_path}",
+        "description": "Run related tests after code changes"
+      }
     ],
-    "deny": [
-      "Bash(rm -rf /)",
-      "Bash(sudo rm -rf *)"
+    "preToolUse": [
+      {
+        "tool": "Bash",
+        "command": ".claude/hooks/security-check.py command \"${command}\"",
+        "description": "Security check for commands"
+      }
+    ],
+    "userPromptSubmit": [
+      {
+        "command": ".claude/hooks/intelligent-automation.py",
+        "description": "Suggest relevant sub-agents based on context"
+      }
     ]
   },
-  "cleanupPeriodDays": 30,
-  "includeCoAuthoredBy": true
+  "autoApprove": {
+    "commands": [
+      "ls",
+      "pwd",
+      "cd",
+      "cat",
+      "grep",
+      "find",
+      "echo",
+      "git status",
+      "git diff",
+      "git log",
+      "git branch",
+      "git add",
+      "python",
+      "pytest",
+      "pip list",
+      "npm list",
+      "npm run",
+      "make"
+    ],
+    "patterns": [
+      "^git (?!push|pull|fetch|remote)",
+      "^python .*\\.py$",
+      "^pytest",
+      "^pip install -r",
+      "^npm install$",
+      "^make (test|lint|format)"
+    ]
+  },
+  "blocked": {
+    "commands": [
+      "rm -rf /",
+      "chmod 777",
+      "sudo rm",
+      ":(){ :|:& };:"
+    ],
+    "patterns": [
+      "curl .* \\| .*sh",
+      "wget .* \\| .*sh",
+      "eval\\(",
+      "exec\\("
+    ]
+  },
+  "subAgents": {
+    "defaultTimeout": 300,
+    "maxConcurrent": 3,
+    "contextInjection": {
+      "enabled": true,
+      "files": [
+        "CLAUDE.md",
+        "docs/ai-context/project-structure.md"
+      ]
+    }
+  },
+  "development": {
+    "testCommand": "pytest",
+    "lintCommand": "ruff check .",
+    "formatCommand": "black . && isort .",
+    "typeCheckCommand": "mypy ."
+  }
 }

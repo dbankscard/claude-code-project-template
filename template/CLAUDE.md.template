@@ -1,4 +1,4 @@
-# {{PROJECT_NAME}} - AI Context
+# {{PROJECT_NAME}} - AI Context Template (claude-master)
 
 ## 1. Project Overview
 - **Vision:** {{PROJECT_DESCRIPTION}}
@@ -8,9 +8,9 @@
 
 ## 2. Project Structure
 
-**⚠️ CRITICAL: AI agents MUST read the relevant documentation before attempting any task to understand the complete technology stack, file tree and project organization.**
+**⚠️ CRITICAL: AI agents MUST read the [Project Structure documentation](/docs/ai-context/project-structure.md) before attempting any task to understand the complete technology stack, file tree and project organization.**
 
-{{PROJECT_NAME}} follows a modular Python architecture. For the complete tech stack and file tree structure, see project documentation.
+{{PROJECT_NAME}} follows a modular Python architecture. For the complete tech stack and file tree structure, see [docs/ai-context/project-structure.md](/docs/ai-context/project-structure.md).
 
 ## 3. Coding Standards & AI Instructions
 
@@ -63,7 +63,7 @@ async def process_data(
 - **Functions/Methods**: snake_case (e.g., `process_data`)
 - **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_RETRIES`)
 - **Private methods**: Leading underscore (e.g., `_validate_input`)
-- **Pydantic Models**: PascalCase with descriptive names
+- **Pydantic Models**: PascalCase with `Schema` suffix (e.g., `ChatRequestSchema`, `UserSchema`)
 
 ### Documentation Requirements
 - Every module needs a docstring
@@ -92,7 +92,9 @@ def calculate_total(items: List[Item], tax_rate: float) -> Decimal:
 - Never trust external inputs - validate everything at the boundaries
 - Keep secrets in environment variables, never in code
 - Log security events but never log sensitive data
-- Authenticate users at the API gateway level
+- Authenticate users at the API gateway level - never trust client-side tokens
+- Use Row Level Security (RLS) to enforce data isolation between users
+- Design auth to work across all client types consistently
 - Use secure authentication patterns
 - Validate all authentication tokens server-side
 - Sanitize all user inputs before storing or processing
@@ -105,7 +107,7 @@ def calculate_total(items: List[Item], tax_rate: float) -> Decimal:
 
 ### Observable Systems & Logging Standards
 - Every request needs a correlation ID for debugging
-- Structure logs for machines, not humans - use JSON format
+- Structure logs for machines, not humans - use JSON format with consistent fields (timestamp, level, correlation_id, event, context) for automated analysis
 - Make debugging possible across service boundaries
 
 ### State Management
@@ -118,14 +120,90 @@ def calculate_total(items: List[Item], tax_rate: float) -> Decimal:
 - Use HTTP status codes correctly
 - Version APIs from day one (/v1/, /v2/)
 - Support pagination for list endpoints
-- Use consistent JSON response format
+- Use consistent JSON response format:
+  - Success: `{ "data": {...}, "error": null }`
+  - Error: `{ "data": null, "error": {"message": "...", "code": "..."} }`
 
 ## 4. Multi-Agent Workflows & Context Injection
 
 ### Automatic Context Injection for Sub-Agents
-When using the Task tool to spawn sub-agents, the core project context (CLAUDE.md and relevant documentation) is automatically injected into their prompts. This ensures all sub-agents have immediate access to essential project documentation.
+When using the Task tool to spawn sub-agents, the core project context (CLAUDE.md, project-structure.md, docs-overview.md) is automatically injected into their prompts via the subagent-context-injector hook. This ensures all sub-agents have immediate access to essential project documentation without the need of manual specification in each Task prompt.
 
-## 5. Post-Task Completion Protocol
+## 5. MCP Server Integrations
+
+### Gemini Consultation Server
+**When to use:**
+- Complex coding problems requiring deep analysis or multiple approaches
+- Code reviews and architecture discussions
+- Debugging complex issues across multiple files
+- Performance optimization and refactoring guidance
+- Detailed explanations of complex implementations
+- Highly security relevant tasks
+
+**Automatic Context Injection:**
+- The kit's `gemini-context-injector.sh` hook automatically includes two key files for new sessions:
+  - `/docs/ai-context/project-structure.md` - Complete project structure and tech stack
+  - `/MCP-ASSISTANT-RULES.md` - Your project-specific coding standards and guidelines
+- This ensures Gemini always has comprehensive understanding of your technology stack, architecture, and project standards
+
+**Usage patterns:**
+```python
+# New consultation session (project structure auto-attached by hooks)
+mcp__gemini__consult_gemini(
+    specific_question="How should I optimize this voice pipeline?",
+    problem_description="Need to reduce latency in real-time audio processing",
+    code_context="Current pipeline processes audio sequentially...",
+    attached_files=[
+        "src/core/pipelines/voice_pipeline.py"  # Your specific files
+    ],
+    preferred_approach="optimize"
+)
+
+# Follow-up in existing session
+mcp__gemini__consult_gemini(
+    specific_question="What about memory usage?",
+    session_id="session_123",
+    additional_context="Implemented your suggestions, now seeing high memory usage"
+)
+```
+
+**Key capabilities:**
+- Persistent conversation sessions with context retention
+- File attachment and caching for multi-file analysis
+- Specialized assistance modes (solution, review, debug, optimize, explain)
+- Session management for complex, multi-step problems
+
+**Important:** Treat Gemini's responses as advisory feedback. Evaluate the suggestions critically, incorporate valuable insights into your solution, then proceed with your implementation.
+
+### Context7 Documentation Server
+**Repository**: [Context7 MCP Server](https://github.com/upstash/context7)
+
+**When to use:**
+- Working with external libraries/frameworks (React, FastAPI, Next.js, etc.)
+- Need current documentation beyond training cutoff
+- Implementing new integrations or features with third-party tools
+- Troubleshooting library-specific issues
+
+**Usage patterns:**
+```python
+# Resolve library name to Context7 ID
+mcp__context7__resolve_library_id(libraryName="react")
+
+# Fetch focused documentation
+mcp__context7__get_library_docs(
+    context7CompatibleLibraryID="/facebook/react",
+    topic="hooks",
+    tokens=8000
+)
+```
+
+**Key capabilities:**
+- Up-to-date library documentation access
+- Topic-focused documentation retrieval
+- Support for specific library versions
+- Integration with current development practices
+
+## 6. Post-Task Completion Protocol
 
 After completing any coding task, follow this checklist:
 
@@ -139,24 +217,79 @@ Run the appropriate commands based on what was modified:
 - Ensure all type checks pass before considering the task complete
 - If type errors are found, fix them before marking the task as done
 
-## 6. Project-Specific Configuration
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
 
-### Technology Stack
-- **Language**: Python 3.12+
-- **Framework**: [To be determined]
-- **Database**: [To be determined]
-- **Testing**: pytest, pytest-cov
-- **Documentation**: Sphinx, Google-style docstrings
+## 7. Development Commands
+- `make dev`: Start development environment
+- `make test`: Run full test suite
+- `make lint`: Code quality checks
+- `make deploy`: Deploy to staging
 
-### Development Workflow
-1. Use `/dev:feature` for new features
-2. Use `/dev:test` to ensure test coverage
-3. Use `/dev:review` before committing
-4. Use `/git:commit` for conventional commits
-5. Use `/security:audit` periodically
+## 8. Master Orchestrator Workflow
+For complex development tasks, always start with the master-orchestrator:
 
-### Custom Instructions
-[Add your project-specific instructions here]
+```bash
+> Use the master-orchestrator sub-agent to develop a new user authentication feature
+```
+
+The master orchestrator will:
+1. **Plan the workflow** using planning-architect
+2. **Coordinate implementation** with specialist agents
+3. **Manage quality gates** through code-reviewer and security-auditor
+4. **Ensure testing** via test-engineer
+5. **Update documentation** with documentation-specialist
+6. **Validate performance** through performance-optimizer
+
+## 9. Sub-Agent Coordination
+- **master-orchestrator**: MUST BE USED for complex multi-step workflows and feature development
+- **planning-architect**: Technical planning and system design (delegated by orchestrator)
+- **code-reviewer**: Code quality and best practices (automated and on-demand)
+- **test-engineer**: Test automation and debugging (TDD coordination)
+- **security-auditor**: Security compliance and vulnerability assessment
+- **documentation-specialist**: Comprehensive project documentation
+- **performance-optimizer**: Performance analysis and optimization
+
+## 10. Direct Agent Usage
+For simple, focused tasks, you can invoke agents directly:
+- `> Use the code-reviewer sub-agent to review my recent changes`
+- `> Use the test-engineer sub-agent to fix these failing tests`
+- `> Use the security-auditor sub-agent to audit the auth module`
+
+## 11. Orchestrated Workflows
+For complex tasks, let the master orchestrator coordinate:
+- `> Use the master-orchestrator to plan and implement [FEATURE]`
+- `> Use the master-orchestrator to conduct a comprehensive code review`
+- `> Use the master-orchestrator to assess deployment readiness`
+
+## 12. Code Conventions
+- Use type hints for all function signatures
+- Follow Google docstring format
+- Implement error handling with custom exceptions
+- Maintain single responsibility principle
+- Write tests before implementation (TDD)
+
+## 13. Context Management
+@docs/architecture.md # System design decisions
+@docs/api-specification.md # API contracts
+@~/.claude/team-style.md # Team coding standards
+
+## 14. Sub-Agent Integration Workflow
+1. **Planning Phase**: Planning-architect decomposes requirements
+2. **Implementation**: Main thread implements with specialist consultation
+3. **Quality Assurance**: Code-reviewer and test-engineer validate changes
+4. **Security Review**: Security-auditor performs compliance checks
+5. **Documentation**: Documentation-specialist updates technical docs
+6. **Optimization**: Performance-optimizer identifies improvements
+
+## 15. Security Guidelines
+- Never commit credentials or API keys
+- Use environment variables for configuration
+- Validate all inputs at service boundaries
+- Implement rate limiting for all endpoints
 
 ---
 
