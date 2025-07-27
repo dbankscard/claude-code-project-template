@@ -1,0 +1,121 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+.DS_Store
+
+# Claude Code
+.claude/settings.local.json
+.claude/cache/
+.claude/logs/
+.claude/hooks/automation_history.json
+.claude/hooks/approval_stats.json
+.claude/hooks/command_audit.log
+.claude/security-report.json
+.claude/pending_commands.txt
+.claude/metrics/
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Documentation
+docs/_build/
+docs/_static/
+docs/_templates/
+site/
+
+# Package managers
+pip-log.txt
+pip-delete-this-directory.txt
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Security
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+.env.local
+.env.*.local
+.env.production
+
+# Logs
+logs/
+*.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Project specific
+# Add your project-specific ignores here

@@ -1,0 +1,163 @@
+# {{PROJECT_NAME}} - AI Context
+
+## 1. Project Overview
+- **Vision:** {{PROJECT_DESCRIPTION}}
+- **Current Phase:** Initial Development
+- **Key Architecture:** [To be defined based on project needs]
+- **Development Strategy:** Iterative development with Claude Code assistance
+
+## 2. Project Structure
+
+**⚠️ CRITICAL: AI agents MUST read the relevant documentation before attempting any task to understand the complete technology stack, file tree and project organization.**
+
+{{PROJECT_NAME}} follows a modular Python architecture. For the complete tech stack and file tree structure, see project documentation.
+
+## 3. Coding Standards & AI Instructions
+
+### General Instructions
+- Your most important job is to manage your own context. Always read any relevant files BEFORE planning changes.
+- When updating documentation, keep updates concise and on point to prevent bloat.
+- Write code following KISS, YAGNI, and DRY principles.
+- When in doubt follow proven best practices for implementation.
+- Do not commit to git without user approval.
+- Do not run any servers, rather tell the user to run servers for testing.
+- Always consider industry standard libraries/frameworks first over custom implementations.
+- Never mock anything. Never use placeholders. Never omit code.
+- Apply SOLID principles where relevant. Use modern framework features rather than reinventing solutions.
+- Be brutally honest about whether an idea is good or bad.
+- Make side effects explicit and minimal.
+- Design database schema to be evolution-friendly (avoid breaking changes).
+
+### File Organization & Modularity
+- Default to creating multiple small, focused files rather than large monolithic ones
+- Each file should have a single responsibility and clear purpose
+- Keep files under 350 lines when possible - split larger files by extracting utilities, constants, types, or logical components into separate modules
+- Separate concerns: utilities, constants, types, components, and business logic into different files
+- Prefer composition over inheritance - use inheritance only for true 'is-a' relationships, favor composition for 'has-a' or behavior mixing
+- Follow existing project structure and conventions - place files in appropriate directories
+- Use well defined sub-directories to keep things organized and scalable
+- Structure projects with clear folder hierarchies and consistent naming conventions
+- Import/export properly - design for reusability and maintainability
+
+### Type Hints (REQUIRED)
+- **Always** use type hints for function parameters and return values
+- Use `from typing import` for complex types
+- Prefer `Optional[T]` over `Union[T, None]`
+- Use Pydantic models for data structures
+
+```python
+# Good
+from typing import Optional, List, Dict, Tuple
+
+async def process_data(
+    data: List[Dict[str, Any]],
+    user_id: str,
+    options: Optional[Dict[str, Any]] = None
+) -> Tuple[bool, Dict[str, Any]]:
+    """Process data with proper type hints."""
+    pass
+```
+
+### Naming Conventions
+- **Classes**: PascalCase (e.g., `DataProcessor`)
+- **Functions/Methods**: snake_case (e.g., `process_data`)
+- **Constants**: UPPER_SNAKE_CASE (e.g., `MAX_RETRIES`)
+- **Private methods**: Leading underscore (e.g., `_validate_input`)
+- **Pydantic Models**: PascalCase with descriptive names
+
+### Documentation Requirements
+- Every module needs a docstring
+- Every public function needs a docstring
+- Use Google-style docstrings
+- Include type information in docstrings
+
+```python
+def calculate_total(items: List[Item], tax_rate: float) -> Decimal:
+    """Calculate total price including tax.
+
+    Args:
+        items: List of items to calculate total for
+        tax_rate: Tax rate as decimal (e.g., 0.08 for 8%)
+
+    Returns:
+        Total price including tax as Decimal
+
+    Raises:
+        ValueError: If tax_rate is negative
+    """
+    pass
+```
+
+### Security First
+- Never trust external inputs - validate everything at the boundaries
+- Keep secrets in environment variables, never in code
+- Log security events but never log sensitive data
+- Authenticate users at the API gateway level
+- Use secure authentication patterns
+- Validate all authentication tokens server-side
+- Sanitize all user inputs before storing or processing
+
+### Error Handling
+- Use specific exceptions over generic ones
+- Always log errors with context
+- Provide helpful error messages
+- Fail securely - errors shouldn't reveal system internals
+
+### Observable Systems & Logging Standards
+- Every request needs a correlation ID for debugging
+- Structure logs for machines, not humans - use JSON format
+- Make debugging possible across service boundaries
+
+### State Management
+- Have one source of truth for each piece of state
+- Make state changes explicit and traceable
+- Keep state minimal and well-organized
+
+### API Design Principles
+- RESTful design with consistent URL patterns
+- Use HTTP status codes correctly
+- Version APIs from day one (/v1/, /v2/)
+- Support pagination for list endpoints
+- Use consistent JSON response format
+
+## 4. Multi-Agent Workflows & Context Injection
+
+### Automatic Context Injection for Sub-Agents
+When using the Task tool to spawn sub-agents, the core project context (CLAUDE.md and relevant documentation) is automatically injected into their prompts. This ensures all sub-agents have immediate access to essential project documentation.
+
+## 5. Post-Task Completion Protocol
+
+After completing any coding task, follow this checklist:
+
+### 1. Type Safety & Quality Checks
+Run the appropriate commands based on what was modified:
+- **Python projects**: Run mypy type checking
+- **JavaScript/TypeScript projects**: Run tsc --noEmit
+- **Other languages**: Run appropriate linting/type checking tools
+
+### 2. Verification
+- Ensure all type checks pass before considering the task complete
+- If type errors are found, fix them before marking the task as done
+
+## 6. Project-Specific Configuration
+
+### Technology Stack
+- **Language**: Python 3.12+
+- **Framework**: [To be determined]
+- **Database**: [To be determined]
+- **Testing**: pytest, pytest-cov
+- **Documentation**: Sphinx, Google-style docstrings
+
+### Development Workflow
+1. Use `/dev:feature` for new features
+2. Use `/dev:test` to ensure test coverage
+3. Use `/dev:review` before committing
+4. Use `/git:commit` for conventional commits
+5. Use `/security:audit` periodically
+
+### Custom Instructions
+[Add your project-specific instructions here]
+
+---
+
+**Remember**: This file is the source of truth for how Claude understands and works with your project. Keep it updated as your project evolves.

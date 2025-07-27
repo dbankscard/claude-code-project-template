@@ -33,7 +33,9 @@ What actually happened.
 - Hook scripts involved: [e.g., auto-format.sh, security-check.py]
 
 ## Error Messages
+```
 Paste any error messages here
+```
 
 ## Files
 Please attach or paste relevant configuration files:

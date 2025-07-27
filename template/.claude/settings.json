@@ -1,0 +1,116 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "type": "python",
+    "framework": null,
+    "testFramework": "pytest"
+  },
+  "auto_approval": {
+    "enabled": true,
+    "percentage_target": 90,
+    "safe_commands": [
+      "ls", "pwd", "cat", "head", "tail", "grep", "find",
+      "git status", "git diff", "git log", "git branch",
+      "python --version", "pip list", "pytest"
+    ],
+    "require_approval": [
+      "rm", "mv", "cp", "chmod", "chown",
+      "pip install", "npm install",
+      "git push", "git merge", "git rebase"
+    ]
+  },
+  "hooks": {
+    "auto_format": {
+      "enabled": true,
+      "on_save": true,
+      "tools": {
+        "python": ["black", "isort"],
+        "javascript": ["prettier"],
+        "markdown": ["prettier"]
+      }
+    },
+    "security_check": {
+      "enabled": true,
+      "block_on_critical": true,
+      "scan_dependencies": true
+    },
+    "intelligent_automation": {
+      "enabled": true,
+      "trigger_threshold": {
+        "code_changes": 5,
+        "test_failures": 1,
+        "security_issues": 1
+      }
+    },
+    "command_approval": {
+      "enabled": true,
+      "log_commands": true
+    }
+  },
+  "agents": {
+    "auto_trigger": true,
+    "preferred_agents": [
+      "code_reviewer",
+      "test_engineer",
+      "security_auditor"
+    ],
+    "trigger_rules": {
+      "code_reviewer": {
+        "on": ["code_changes", "pre_commit"],
+        "file_threshold": 3
+      },
+      "test_engineer": {
+        "on": ["new_feature", "test_failure"],
+        "coverage_threshold": 80
+      },
+      "security_auditor": {
+        "on": ["dependency_update", "auth_changes"],
+        "severity_threshold": "medium"
+      },
+      "documentation_specialist": {
+        "on": ["api_changes", "new_feature"],
+        "auto_generate": true
+      }
+    }
+  },
+  "development": {
+    "test_on_save": false,
+    "lint_on_save": true,
+    "auto_fix_issues": true,
+    "commit_style": "conventional",
+    "branch_naming": {
+      "feature": "feature/",
+      "bugfix": "fix/",
+      "hotfix": "hotfix/",
+      "release": "release/"
+    }
+  },
+  "security": {
+    "scan_commits": true,
+    "block_secrets": true,
+    "dependency_check": "weekly",
+    "allowed_licenses": [
+      "MIT", "Apache-2.0", "BSD-3-Clause", "BSD-2-Clause",
+      "ISC", "Python-2.0", "LGPL-3.0"
+    ]
+  },
+  "integrations": {
+    "github": {
+      "enabled": true,
+      "auto_link_issues": true,
+      "pr_template": true
+    },
+    "mcp_servers": {
+      "filesystem": true,
+      "github": true,
+      "gemini": false,
+      "context7": false
+    }
+  },
+  "ui": {
+    "theme": "auto",
+    "show_agent_thinking": true,
+    "verbose_commands": false,
+    "confirm_destructive": true
+  }
+}

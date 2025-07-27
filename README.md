@@ -13,7 +13,7 @@ A comprehensive, production-ready template for Claude Code projects featuring:
 
 ```bash
 # 1. Use this template
-git clone https://github.com/your-username/claude-code-project-template.git my-project
+git clone https://github.com/dbankscard/claude-code-project-template.git my-project
 cd my-project
 
 # 2. Initialize your project

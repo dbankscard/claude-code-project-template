@@ -1,0 +1,62 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "node",
+      "args": [
+        "/path/to/@modelcontextprotocol/server-filesystem/dist/index.js",
+        "."
+      ]
+    },
+    "github": {
+      "command": "node",
+      "args": [
+        "/path/to/@modelcontextprotocol/server-github/dist/index.js"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "gemini": {
+      "command": "node",
+      "args": [
+        "/path/to/gemini-mcp-server/build/index.js"
+      ],
+      "env": {
+        "GOOGLE_AI_API_KEY": "${GEMINI_API_KEY}"
+      }
+    },
+    "context7": {
+      "command": "node",
+      "args": [
+        "/path/to/context7-mcp-server/dist/index.js"
+      ]
+    }
+  },
+  "projectContext": {
+    "name": "{{PROJECT_NAME}}",
+    "description": "{{PROJECT_DESCRIPTION}}",
+    "primaryLanguage": "python",
+    "contextFiles": [
+      "CLAUDE.md",
+      "README.md",
+      "pyproject.toml"
+    ],
+    "excludePatterns": [
+      "venv/",
+      "__pycache__/",
+      "*.pyc",
+      ".git/",
+      "node_modules/",
+      "dist/",
+      "build/",
+      ".pytest_cache/",
+      "htmlcov/"
+    ]
+  },
+  "automationRules": {
+    "autoTriggerAgents": true,
+    "codeReviewThreshold": 5,
+    "testGenerationEnabled": true,
+    "securityScanOnCommit": true
+  }
+}
