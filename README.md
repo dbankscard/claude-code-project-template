@@ -30,10 +30,12 @@ This template was specifically built to maximize Claude Code's capabilities by i
 
 - 🤖 **7 Specialized Sub-Agents** with master orchestrator coordination
 - ⚡ **Smart Auto-Approval** for 90%+ of development commands  
-- 🎯 **17 Custom Commands** across development, project, git, and security workflows
-- 🔧 **Automated Hooks** for quality enforcement and sub-agent triggering
-- 🏗️ **Modern Python** project structure with comprehensive tooling
-- 🔒 **Security-First** design with built-in compliance checking
+- 🎯 **Custom Slash Commands** organized by namespace (dev, project, git, security)
+- 🔧 **4 Automated Hooks** for formatting, security, testing, and agent recommendations
+- 🏗️ **Modern Python 3.12+** with type hints, async support, and comprehensive tooling
+- 🔒 **Security-First** design with automated vulnerability scanning
+- 🌐 **MCP Server Integration** for enhanced Claude capabilities
+- 📝 **Cascading Context System** for flexible configuration inheritance
 
 ## Quick Start
 
@@ -42,15 +44,15 @@ This template was specifically built to maximize Claude Code's capabilities by i
 git clone https://github.com/dbankscard/claude-code-project-template.git my-project
 cd my-project
 
-# 2. Initialize your project
+# 2. Initialize your project (with interactive MCP setup)
 python scripts/initialize_project.py my-awesome-app
 cd my-awesome-app
 
 # 3. Start Claude Code
 claude
 
-# 4. Try your first command
-> /dev:feature user authentication with OAuth2
+# 4. Try the master orchestrator
+> Use the master-orchestrator to create a user authentication feature with OAuth2
 ```
 
 ## Features
@@ -67,21 +69,43 @@ claude
 
 ### ⚡ Smart Automation
 
-- **Auto-Approval System**: Safe commands (ls, git, grep) execute instantly
-- **Intelligent Hooks**: Automatic code formatting, quality checks, security scans
-- **Context-Aware Triggering**: Right sub-agent for the right task automatically
+- **Auto-Approval System**: Safe commands execute instantly based on patterns
+- **Intelligent Hooks**:
+  - `auto-format.sh`: Formats Python/JS/JSON/Markdown files on edit
+  - `intelligent-automation.py`: Recommends relevant sub-agents based on changes
+  - `security-check.py`: Validates for secrets and dangerous patterns
+  - `test-automation.py`: Runs related tests after code changes
+- **Context-Aware Triggering**: Automatic sub-agent recommendations
 
 ### 🎯 Custom Commands
 
-- **Development**: `/dev:feature`, `/dev:review`, `/dev:test`, `/dev:debug`, `/dev:refactor`
-- **Project**: `/project:plan`, `/project:deploy`, `/project:docs`, `/project:status`
-- **Git**: `/git:commit`, `/git:pr`, `/git:release`, `/git:hotfix`
-- **Security**: `/security:audit`, `/security:scan`, `/security:compliance`
+- **Development**: 
+  - `/dev:feature` - Create new features with full workflow
+  - `/dev:review` - Comprehensive code review
+  - `/dev:test` - Testing workflow with coverage
+- **Project**: 
+  - `/project:plan` - Architecture and planning
+- **Git**: 
+  - `/git:commit` - Smart conventional commits
+- **Security**: 
+  - `/security:audit` - Full security analysis
+
+### 🌐 MCP Server Integration
+
+- **Auto-Detection**: Automatically detects installed MCP servers during setup
+- **Interactive Configuration**: Choose which servers to enable for your project
+- **Built-in Servers**: Filesystem, Git, GitHub integration
+- **Database Support**: PostgreSQL, SQLite, Redis connections
+- **External Services**: Slack, Google Drive, AWS integrations
+- **Gemini Consultation**: Deep code analysis and architecture discussions
+- **Context7 Documentation**: Access to up-to-date library documentation
+- **Agent-Specific Configs**: Each agent has tailored MCP server access
 
 ## Documentation
 
 - [Getting Started Guide](docs/guides/getting-started.md)
 - [Complete Usage Guide](docs/guides/usage.md)
+- [MCP Configuration Guide](docs/guides/mcp-configuration.md)
 - [Customization Instructions](docs/guides/customization.md)
 - [Troubleshooting](docs/guides/troubleshooting.md)
 
@@ -125,11 +149,13 @@ The template optimizes for both human and AI developers:
 
 ## How It Works
 
-1. **Initialization**: The template sets up a complete project structure with all necessary configurations
-2. **Context Loading**: Claude reads `CLAUDE.md` to understand your project's specific requirements
-3. **Command Execution**: Custom commands trigger appropriate workflows and agents
-4. **Automation**: Hooks handle repetitive tasks like formatting and security checks
-5. **Multi-Agent Coordination**: Complex tasks are automatically broken down and distributed
+1. **Initialization**: The template sets up a complete project structure with `.claude/` directory
+2. **Context Loading**: Claude reads `CLAUDE.md` and automatically injects context to sub-agents
+3. **Command Execution**: Custom commands or direct agent invocation trigger workflows
+4. **Hook Automation**: Pre/post tool use hooks handle security, formatting, and testing
+5. **Multi-Agent Orchestration**: Master orchestrator coordinates specialist agents:
+   - Planning → Implementation → Review → Testing → Documentation → Optimization
+6. **MCP Integration**: Enhanced capabilities through external server connections
 
 ## Requirements
 
@@ -137,6 +163,24 @@ The template optimizes for both human and AI developers:
 - Claude Code CLI
 - Git
 - (Optional) Docker for containerized development
+- (Optional) MCP servers for enhanced features
+
+## Project Structure
+
+```
+my-project/
+├── .claude/
+│   ├── agents/          # 7 specialized sub-agents
+│   ├── commands/        # Custom slash commands
+│   ├── hooks/           # Automation scripts
+│   └── settings.json    # Claude configuration
+├── src/                 # Source code
+├── tests/               # Test suite
+├── docs/                # Documentation
+├── CLAUDE.md           # Main AI context file
+├── .mcp.json           # MCP server configuration
+└── pyproject.toml      # Python project config
+```
 
 ## Contributing
 
@@ -154,4 +198,34 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-Transform your development workflow with AI-coordinated, automated, and consistently high-quality code development.
+## Example Workflows
+
+### Creating a New Feature
+```bash
+# Using master orchestrator (recommended for complex features)
+> Use the master-orchestrator to create a user authentication system
+
+# Or using slash command
+> /dev:feature user-auth --description "JWT-based authentication"
+```
+
+### Running Security Audit
+```bash
+# Direct agent invocation
+> Use the security-auditor to check for vulnerabilities
+
+# Or slash command
+> /security:audit --scope full --level paranoid
+```
+
+### Code Review
+```bash
+# After making changes
+> Use the code-reviewer to review my recent changes
+
+# The intelligent-automation hook will also suggest this automatically!
+```
+
+---
+
+**Built with Claude in mind, for Claude to excel.** Transform your development workflow with AI-coordinated, automated, and consistently high-quality code development.

@@ -9,6 +9,7 @@ Before you begin, ensure you have the following installed:
 - **Python 3.12+** - Required for running the template and its tools
 - **Claude Code CLI** - The AI assistant that powers your development workflow
 - **Git** - For version control and project management
+- **Node.js/npm** (Recommended) - For MCP server support
 - **Docker** (Optional) - For containerized development environments
 
 ## Installation
@@ -33,6 +34,7 @@ This will:
 - Create a new project directory with your chosen name
 - Set up the complete project structure
 - Configure all sub-agents and automation hooks
+- **Detect and configure MCP servers interactively**
 - Initialize git repository
 - Create virtual environment
 
@@ -62,10 +64,10 @@ claude
 
 ### 2. Try Your First Command
 
-The template includes 17 custom commands. Here's a simple example:
+The template includes custom commands and the master orchestrator. Here's a simple example:
 
 ```bash
-> /dev:feature user authentication with OAuth2
+> Use the master-orchestrator to create a user authentication feature with OAuth2
 ```
 
 This command will:
@@ -100,20 +102,26 @@ Your project comes with 7 specialized sub-agents:
 - `/dev:feature <description>` - Implement new features
 - `/dev:review` - Review current code
 - `/dev:test` - Create or update tests
-- `/dev:debug <issue>` - Debug problems
-- `/dev:refactor <target>` - Refactor code
 
 ### Project Commands
 - `/project:plan <description>` - Plan project architecture
-- `/project:status` - Check project status
-- `/project:docs` - Generate documentation
-- `/project:deploy` - Prepare for deployment
 
 ### Git Commands
 - `/git:commit` - Smart commit with message
-- `/git:pr` - Create pull request
-- `/git:release <version>` - Create release
-- `/git:hotfix <issue>` - Create hotfix branch
+
+### Security Commands
+- `/security:audit` - Run security analysis
+
+## MCP Server Integration
+
+Your project can connect to external tools through MCP servers:
+
+- **Filesystem**: Already configured for file access
+- **Git/GitHub**: Version control integration
+- **Databases**: PostgreSQL, SQLite, Redis
+- **Services**: Slack, Google Drive, AWS
+
+See the [MCP Configuration Guide](mcp-configuration.md) for details.
 
 ## Next Steps
 

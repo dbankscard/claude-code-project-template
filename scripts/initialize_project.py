@@ -13,6 +13,9 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Optional
 
+# Import MCP detection module
+from detect_mcp_servers import interactive_mcp_setup
+
 class ProjectInitializer:
     def __init__(self, project_name: str, options: Dict):
         self.project_name = self.sanitize_name(project_name)
@@ -56,6 +59,10 @@ class ProjectInitializer:
             # Install dependencies
             if not self.options.get('skip_install'):
                 self.install_dependencies()
+            
+            # Configure MCP servers
+            if not self.options.get('skip_mcp'):
+                self.configure_mcp_servers()
             
             # Generate initial documentation
             self.generate_documentation()
@@ -101,8 +108,7 @@ class ProjectInitializer:
         template_files = [
             ('CLAUDE.md.template', 'CLAUDE.md'),
             ('.gitignore.template', '.gitignore'),
-            ('pyproject.toml.template', 'pyproject.toml'),
-            ('.mcp.json.template', '.mcp.json')
+            ('pyproject.toml.template', 'pyproject.toml')
         ]
         
         for template_name, final_name in template_files:
@@ -137,7 +143,6 @@ class ProjectInitializer:
             'README.md',
             'pyproject.toml',
             'setup.py',
-            '.mcp.json',
             '.claude/settings.json',
             'src/*/__init__.py',
             'tests/conftest.py',
@@ -242,6 +247,43 @@ class ProjectInitializer:
         os.chdir(original_dir)
         print("✅ Dependencies installed")
     
+    def configure_mcp_servers(self):
+        """Configure MCP servers interactively"""
+        print("\n🔌 Configuring MCP Servers...")
+        
+        # Run interactive MCP setup
+        mcp_config = interactive_mcp_setup(self.project_dir)
+        
+        if mcp_config:
+            # If .mcp.json template exists and user configured servers, it's already saved
+            print("✅ MCP servers configured")
+        else:
+            # Create a minimal .mcp.json if user skipped
+            minimal_config = {
+                "servers": {
+                    "filesystem": {
+                        "command": "npx",
+                        "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+                        "settings": {
+                            "extensions": [".py", ".js", ".ts", ".json", ".yaml", ".md"],
+                            "ignore": ["node_modules", "__pycache__", ".git", "venv"]
+                        }
+                    }
+                },
+                "globalSettings": {
+                    "timeout": 30000,
+                    "retries": 3,
+                    "concurrentRequests": 5
+                }
+            }
+            
+            mcp_file = self.project_dir / ".mcp.json"
+            with open(mcp_file, "w") as f:
+                json.dump(minimal_config, f, indent=2)
+            
+            print("ℹ️  Created minimal .mcp.json with filesystem server")
+            print("   You can configure additional MCP servers later.")
+    
     def generate_documentation(self):
         """Generate initial documentation"""
         print("📚 Generating documentation...")
@@ -338,7 +380,12 @@ Thank you for contributing!
         print("   claude\n")
         
         print("4. Try your first command:")
-        print("   /dev:feature Add user authentication\n")
+        print("   > Use the master-orchestrator to create a user authentication feature\n")
+        
+        print("💡 MCP Servers:")
+        print("   - Check .mcp.json for configured servers")
+        print("   - Add environment variables to .env if needed")
+        print("   - Run 'python scripts/detect_mcp_servers.py' to reconfigure\n")
         
         print("📚 Resources:")
         print("   - CLAUDE.md: AI context and project configuration")
@@ -398,6 +445,12 @@ def main():
         '--skip-install',
         action='store_true',
         help='Skip dependency installation'
+    )
+    
+    parser.add_argument(
+        '--skip-mcp',
+        action='store_true',
+        help='Skip MCP server configuration'
     )
     
     parser.add_argument(
