@@ -97,12 +97,11 @@ claude
 
 - **Auto-Detection**: Automatically detects installed MCP servers during setup
 - **Interactive Configuration**: Choose which servers to enable for your project
-- **Built-in Servers**: Filesystem, Git, GitHub integration
-- **Database Support**: PostgreSQL, SQLite, Redis connections
-- **External Services**: Slack, Google Drive, AWS integrations
-- **Gemini Consultation**: Deep code analysis and architecture discussions
-- **Context7 Documentation**: Access to up-to-date library documentation
-- **Agent-Specific Configs**: Each agent has tailored MCP server access
+- **15+ Supported Servers**: Filesystem, GitHub, GitLab, Google Drive, Slack, Memory, Puppeteer, and more
+- **Dynamic Configuration**: No hardcoded server configs - everything is detected and configured at runtime
+- **Easy Reconfiguration**: Run `python scripts/detect_mcp_servers.py` anytime to update
+- **Environment Support**: Automatically generates .env.example for required API keys
+- **Project-Specific**: Each project gets its own MCP configuration
 
 ## Documentation
 
@@ -181,7 +180,7 @@ my-project/
 ├── tests/               # Test suite
 ├── docs/                # Documentation
 ├── CLAUDE.md           # Main AI context file
-├── .mcp.json           # MCP server configuration
+├── .mcp.json           # MCP server configuration (generated during init)
 └── pyproject.toml      # Python project config
 ```
 

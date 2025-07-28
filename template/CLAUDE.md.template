@@ -131,77 +131,38 @@ When using the Task tool to spawn sub-agents, the core project context (CLAUDE.m
 
 ## 5. MCP Server Integrations
 
-### Gemini Consultation Server
-**When to use:**
-- Complex coding problems requiring deep analysis or multiple approaches
-- Code reviews and architecture discussions
-- Debugging complex issues across multiple files
-- Performance optimization and refactoring guidance
-- Detailed explanations of complex implementations
-- Highly security relevant tasks
+During project initialization, the template automatically detects and configures available MCP servers on your system. You'll be prompted to select which servers to enable for your project.
 
-**Automatic Context Injection:**
-- The kit's `gemini-context-injector.sh` hook automatically includes two key files for new sessions:
-  - `/docs/ai-context/project-structure.md` - Complete project structure and tech stack
-  - `/MCP-ASSISTANT-RULES.md` - Your project-specific coding standards and guidelines
-- This ensures Gemini always has comprehensive understanding of your technology stack, architecture, and project standards
+### Available MCP Servers
+The template can auto-detect and configure various MCP servers including:
+- **Filesystem** - File system operations and management
+- **GitHub** - GitHub API integration 
+- **GitLab** - GitLab API integration
+- **Google Drive** - Google Drive file access
+- **Slack** - Slack messaging integration
+- **Memory** - Persistent memory/knowledge base
+- **Puppeteer** - Web browser automation
+- **Brave Search** - Web search capabilities
+- **Google Maps** - Location and mapping services
+- **Sequential Thinking** - Step-by-step reasoning
+- **Fetch** - HTTP requests and web scraping
+- **Gemini** - AI consultation and code review
+- **Context7** - Library documentation access
+- **Everything** - Local file search (Windows)
+- **Apple Notes** - Apple Notes integration (macOS)
 
-**Usage patterns:**
-```python
-# New consultation session (project structure auto-attached by hooks)
-mcp__gemini__consult_gemini(
-    specific_question="How should I optimize this voice pipeline?",
-    problem_description="Need to reduce latency in real-time audio processing",
-    code_context="Current pipeline processes audio sequentially...",
-    attached_files=[
-        "src/core/pipelines/voice_pipeline.py"  # Your specific files
-    ],
-    preferred_approach="optimize"
-)
+### Configuring MCP Servers
+1. **During initialization**: Run `python scripts/initialize_project.py` and follow the interactive prompts
+2. **After initialization**: Run `python scripts/detect_mcp_servers.py` from your project directory
+3. **Manual configuration**: Edit `.mcp.json` in your project root
 
-# Follow-up in existing session
-mcp__gemini__consult_gemini(
-    specific_question="What about memory usage?",
-    session_id="session_123",
-    additional_context="Implemented your suggestions, now seeing high memory usage"
-)
-```
+### Using MCP Servers in Claude
+Once configured, MCP servers are available through the `mcp__` prefix:
+- `mcp__filesystem__read_file(path="/path/to/file")`
+- `mcp__github__create_issue(repo="owner/repo", title="Issue title")`
+- `mcp__memory__store(key="important_note", value="Remember this")`
 
-**Key capabilities:**
-- Persistent conversation sessions with context retention
-- File attachment and caching for multi-file analysis
-- Specialized assistance modes (solution, review, debug, optimize, explain)
-- Session management for complex, multi-step problems
-
-**Important:** Treat Gemini's responses as advisory feedback. Evaluate the suggestions critically, incorporate valuable insights into your solution, then proceed with your implementation.
-
-### Context7 Documentation Server
-**Repository**: [Context7 MCP Server](https://github.com/upstash/context7)
-
-**When to use:**
-- Working with external libraries/frameworks (React, FastAPI, Next.js, etc.)
-- Need current documentation beyond training cutoff
-- Implementing new integrations or features with third-party tools
-- Troubleshooting library-specific issues
-
-**Usage patterns:**
-```python
-# Resolve library name to Context7 ID
-mcp__context7__resolve_library_id(libraryName="react")
-
-# Fetch focused documentation
-mcp__context7__get_library_docs(
-    context7CompatibleLibraryID="/facebook/react",
-    topic="hooks",
-    tokens=8000
-)
-```
-
-**Key capabilities:**
-- Up-to-date library documentation access
-- Topic-focused documentation retrieval
-- Support for specific library versions
-- Integration with current development practices
+The exact functions available depend on which servers you have installed and enabled.
 
 ## 6. Post-Task Completion Protocol
 

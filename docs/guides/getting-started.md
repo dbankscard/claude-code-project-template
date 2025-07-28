@@ -114,12 +114,19 @@ Your project comes with 7 specialized sub-agents:
 
 ## MCP Server Integration
 
-Your project can connect to external tools through MCP servers:
+During project initialization, the template automatically detects available MCP servers on your system and prompts you to configure them. You can connect to various external tools including:
 
-- **Filesystem**: Already configured for file access
-- **Git/GitHub**: Version control integration
-- **Databases**: PostgreSQL, SQLite, Redis
-- **Services**: Slack, Google Drive, AWS
+- **File Systems**: Local filesystem, Google Drive
+- **Version Control**: GitHub, GitLab
+- **Communication**: Slack, email
+- **AI Services**: Gemini consultation, Context7 documentation
+- **Automation**: Puppeteer, web scraping
+- **And more**: Memory persistence, search, maps
+
+To reconfigure MCP servers after initialization:
+```bash
+python scripts/detect_mcp_servers.py
+```
 
 See the [MCP Configuration Guide](mcp-configuration.md) for details.
 
