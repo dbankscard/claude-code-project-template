@@ -2,6 +2,7 @@ import unittest
 import os
 import stat
 import subprocess
+import sys
 from pathlib import Path
 
 class TestHookScripts(unittest.TestCase):
@@ -9,9 +10,9 @@ class TestHookScripts(unittest.TestCase):
         self.hooks_dir = Path(__file__).parent.parent / "template" / ".claude" / "hooks"
         self.expected_hooks = [
             "auto-format.sh",
-            "command-approval.py",
             "intelligent-automation.py",
-            "security-check.py"
+            "security-check.py",
+            "test-automation.py"
         ]
         
     def test_all_hooks_exist(self):
@@ -34,7 +35,7 @@ class TestHookScripts(unittest.TestCase):
             hook_path = self.hooks_dir / hook
             if hook_path.exists():
                 result = subprocess.run(
-                    ["python", "-m", "py_compile", str(hook_path)],
+                    [sys.executable, "-m", "py_compile", str(hook_path)],
                     capture_output=True,
                     text=True
                 )
@@ -65,14 +66,14 @@ class TestHookScripts(unittest.TestCase):
                 self.assertTrue(first_line.startswith("#!"),
                               f"Hook {hook} missing shebang")
                               
-    def test_command_approval_hook_logic(self):
-        hook_path = self.hooks_dir / "command-approval.py"
+    def test_security_check_hook_logic(self):
+        hook_path = self.hooks_dir / "security-check.py"
         if hook_path.exists():
             with open(hook_path, "r") as f:
                 content = f.read()
                 
-            self.assertIn("SAFE_COMMANDS", content)
-            self.assertIn("needs_approval", content)
+            self.assertIn("SENSITIVE_PATTERNS", content)
+            self.assertIn("check_file_content", content)
             self.assertIn("sys.exit", content)
 
 if __name__ == "__main__":

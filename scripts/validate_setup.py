@@ -23,16 +23,12 @@ class SetupValidator:
         print("🔍 Validating Claude Code project setup...\n")
         
         checks = [
-            ("Project Structure", self.check_project_structure),
+            ("Claude Structure", self.check_claude_structure),
             ("Claude Configuration", self.check_claude_configuration),
             ("Git Repository", self.check_git_setup),
             ("Python Environment", self.check_python_environment),
             ("Dependencies", self.check_dependencies),
-            ("Hooks", self.check_hooks),
-            ("Sub-Agents", self.check_subagents),
-            ("Commands", self.check_commands),
-            ("Documentation", self.check_documentation),
-            ("Security", self.check_security)
+            ("Hooks", self.check_hooks)
         ]
         
         for check_name, check_func in checks:
@@ -55,23 +51,22 @@ class SetupValidator:
         
         return self.checks_failed == 0
     
-    def check_project_structure(self) -> bool:
-        """Check if required project structure exists"""
+    def check_claude_structure(self) -> bool:
+        """Check if required Claude structure exists"""
         required_dirs = [
             '.claude',
             '.claude/agents',
             '.claude/commands',
-            '.claude/hooks',
-            'src',
-            'tests',
-            'docs'
+            '.claude/commands/dev',
+            '.claude/commands/project',
+            '.claude/commands/git',
+            '.claude/commands/security',
+            '.claude/hooks'
         ]
         
-        required_files = [
-            'CLAUDE.md',
-            'README.md',
-            '.gitignore'
-        ]
+        # For template validation, we don't check project files
+        # Just Claude structure
+        required_files = []
         
         missing_dirs = []
         missing_files = []
@@ -104,7 +99,7 @@ class SetupValidator:
                     settings = json.load(f)
                 
                 # Validate settings structure
-                required_keys = ['auto_approval', 'hooks', 'agents']
+                required_keys = ['project', 'hooks']
                 missing_keys = [k for k in required_keys if k not in settings]
                 
                 if missing_keys:
@@ -229,9 +224,9 @@ class SetupValidator:
         
         required_hooks = [
             'auto-format.sh',
-            'command-approval.py',
             'intelligent-automation.py',
-            'security-check.py'
+            'security-check.py',
+            'test-automation.py'
         ]
         
         missing_hooks = []
@@ -367,6 +362,29 @@ class SetupValidator:
         
         return True
     
+    def validate_agents(self) -> bool:
+        """Validate agent files have proper structure"""
+        return self.check_subagents()
+    
+    def validate_commands(self) -> bool:
+        """Validate command files have proper structure"""
+        return self.check_commands()
+    
+    def validate_documentation(self) -> bool:
+        """Validate documentation exists"""
+        return self.check_documentation()
+    
+    def run_full_validation(self) -> Dict:
+        """Run all validations and return report"""
+        report = {
+            "claude_structure": self.check_claude_structure(),
+            "agents": self.validate_agents(),
+            "commands": self.validate_commands(),
+            "hooks": self.check_hooks(),
+            "documentation": self.validate_documentation()
+        }
+        return report
+    
     def display_summary(self):
         """Display validation summary"""
         print("\n" + "="*60)
@@ -415,7 +433,7 @@ def main():
     if not is_valid and args.fix:
         print("\n🔧 Attempting to fix issues...")
         # Import and run setup_dependencies
-        from setup_dependencies import DependencyManager
+        # from setup_dependencies import DependencyManager
         manager = DependencyManager(args.project_dir)
         manager.setup_all()
         

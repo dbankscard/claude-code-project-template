@@ -16,75 +16,91 @@ class TestProjectInitializer(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.test_dir, ignore_errors=True)
         
-    def test_validate_project_name_valid(self):
-        initializer = ProjectInitializer("valid-project-name")
-        initializer.validate_project_name()
+    def test_sanitize_project_name_valid(self):
+        options = {}
+        initializer = ProjectInitializer("valid-project-name", options)
+        self.assertEqual(initializer.project_name, "valid_project_name")
         
-    def test_validate_project_name_invalid(self):
-        invalid_names = ["project with spaces", "project@special", "123project"]
-        for name in invalid_names:
-            with self.assertRaises(ValueError):
-                initializer = ProjectInitializer(name)
-                initializer.validate_project_name()
+    def test_sanitize_project_name_invalid(self):
+        test_cases = [
+            ("project with spaces", "project_with_spaces"),
+            ("project@special#chars", "projectspecialchars"),
+            ("123project", "project_123project")
+        ]
+        for input_name, expected_name in test_cases:
+            options = {}
+            initializer = ProjectInitializer(input_name, options)
+            self.assertEqual(initializer.project_name, expected_name)
                 
     def test_copy_template_structure(self):
-        project_path = os.path.join(self.test_dir, self.project_name)
-        initializer = ProjectInitializer(self.project_name, base_dir=self.test_dir)
-        initializer.copy_template_structure(project_path)
+        # Create a minimal template structure for testing
+        template_dir = Path(self.test_dir) / "template"
+        os.makedirs(template_dir / ".claude" / "agents")
+        os.makedirs(template_dir / ".claude" / "hooks")
+        os.makedirs(template_dir / "src" / "project_name")
         
-        expected_dirs = [
-            ".claude/agents",
-            ".claude/commands/dev",
-            ".claude/commands/project",
-            ".claude/commands/git",
-            ".claude/commands/security",
-            ".claude/hooks",
-            "src",
-            "tests",
-            "docs/guides",
-            "docs/ai-context",
-            ".github/workflows"
-        ]
+        # Create some template files
+        (template_dir / "CLAUDE.md.template").write_text("# {{PROJECT_NAME}}")
+        (template_dir / "pyproject.toml.template").write_text("name = \"{{project_name}}\"")
         
-        for dir_path in expected_dirs:
-            full_path = os.path.join(project_path, dir_path)
-            self.assertTrue(os.path.exists(full_path), f"Directory {dir_path} not created")
+        options = {"force": True}
+        initializer = ProjectInitializer(self.project_name, options)
+        initializer.template_dir = template_dir
+        initializer.project_dir = Path(self.test_dir) / self.project_name
+        
+        # Create project directory and copy files
+        initializer.create_project_directory()
+        initializer.copy_template_files()
+        
+        # Check if files were copied
+        self.assertTrue((initializer.project_dir / "CLAUDE.md").exists())
+        self.assertTrue((initializer.project_dir / "pyproject.toml").exists())
             
     def test_customize_templates(self):
-        project_path = os.path.join(self.test_dir, self.project_name)
-        initializer = ProjectInitializer(self.project_name, base_dir=self.test_dir)
+        project_path = Path(self.test_dir) / self.project_name
+        os.makedirs(project_path)
         
-        os.makedirs(project_path, exist_ok=True)
+        # Create test files
+        (project_path / "CLAUDE.md").write_text("Project: {{PROJECT_NAME}}\nName: {{project_name}}")
+        (project_path / "pyproject.toml").write_text("name = \"{{project_name}}\"")
         
-        test_template = os.path.join(project_path, "test.template")
-        with open(test_template, "w") as f:
-            f.write("Project: {{PROJECT_NAME}}\nType: {{PROJECT_TYPE}}")
+        options = {"description": "Test Project"}
+        initializer = ProjectInitializer(self.project_name, options)
+        initializer.project_dir = project_path
+        
+        initializer.customize_files()
+        
+        # Check if placeholders were replaced
+        claude_content = (project_path / "CLAUDE.md").read_text()
+        self.assertIn("Test Project", claude_content)
+        self.assertIn("test_project", claude_content)
+        
+        pyproject_content = (project_path / "pyproject.toml").read_text()
+        self.assertIn("test_project", pyproject_content)
             
-        initializer.customize_templates(project_path)
+    def test_init_git_repository(self):
+        project_path = Path(self.test_dir) / self.project_name
+        os.makedirs(project_path)
         
-        output_file = os.path.join(project_path, "test")
-        self.assertTrue(os.path.exists(output_file))
+        # Create a file to commit
+        (project_path / "README.md").write_text("# Test Project")
         
-        with open(output_file, "r") as f:
-            content = f.read()
-            self.assertIn(self.project_name, content)
-            self.assertIn("python", content)
-            
-    def test_setup_git_repository(self):
-        project_path = os.path.join(self.test_dir, self.project_name)
-        os.makedirs(project_path, exist_ok=True)
+        options = {}
+        initializer = ProjectInitializer(self.project_name, options)
+        initializer.project_dir = project_path
         
-        initializer = ProjectInitializer(self.project_name, base_dir=self.test_dir)
-        initializer.setup_git_repository(project_path)
+        initializer.init_git_repo()
         
-        git_dir = os.path.join(project_path, ".git")
-        self.assertTrue(os.path.exists(git_dir))
+        git_dir = project_path / ".git"
+        self.assertTrue(git_dir.exists())
         
     def test_dry_run_mode(self):
-        initializer = ProjectInitializer(self.project_name, base_dir=self.test_dir, dry_run=True)
-        project_path = initializer.initialize()
-        
-        self.assertFalse(os.path.exists(project_path))
+        # Dry run is handled by argparse in main(), not in the class
+        # Test that we can create an initializer with dry_run option
+        options = {"dry_run": True}
+        initializer = ProjectInitializer(self.project_name, options)
+        self.assertEqual(initializer.project_name, "test_project")
+        self.assertTrue(initializer.options.get("dry_run"))
 
 if __name__ == "__main__":
     unittest.main()

@@ -12,7 +12,7 @@ from validate_setup import SetupValidator
 class TestSetupValidator(unittest.TestCase):
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
-        self.validator = SetupValidator(self.test_dir)
+        self.validator = SetupValidator(Path(self.test_dir))
         
     def tearDown(self):
         shutil.rmtree(self.test_dir, ignore_errors=True)
@@ -46,44 +46,48 @@ class TestSetupValidator(unittest.TestCase):
         agents_dir = os.path.join(self.test_dir, ".claude", "agents")
         os.makedirs(agents_dir, exist_ok=True)
         
-        agent_content = """# master-orchestrator
-
-## Role
-Orchestrates complex multi-agent workflows.
-
-## Expertise
-- Multi-agent coordination
-
-## Activation Triggers
-- Complex tasks requiring multiple specialists
-"""
+        # Create all required agents
+        required_agents = [
+            'master-orchestrator.md',
+            'planning-architect.md',
+            'code-reviewer.md',
+            'test-engineer.md',
+            'security-auditor.md',
+            'documentation-specialist.md',
+            'performance-optimizer.md'
+        ]
         
-        agent_path = os.path.join(agents_dir, "master-orchestrator.md")
-        with open(agent_path, "w") as f:
-            f.write(agent_content)
+        for agent in required_agents:
+            agent_path = os.path.join(agents_dir, agent)
+            with open(agent_path, "w") as f:
+                f.write("# Test Agent\n\nTest content")
             
         result = self.validator.validate_agents()
         self.assertTrue(result)
         
     def test_validate_commands(self):
-        commands_dir = os.path.join(self.test_dir, ".claude", "commands", "dev")
-        os.makedirs(commands_dir, exist_ok=True)
-        
-        command_content = """# /dev:feature
+        # Create all required command categories
+        command_categories = ['dev', 'project', 'git', 'security']
+        for category in command_categories:
+            commands_dir = os.path.join(self.test_dir, ".claude", "commands", category)
+            os.makedirs(commands_dir, exist_ok=True)
+            
+            # Create a test command file for each category
+            command_content = f"""# /{category}:test
 
 ## Usage
-/dev:feature <feature-name> <description>
+/{category}:test <args>
 
 ## Description
-Creates a new feature branch and sets up the development environment.
+Test command for {category} category.
 
 ## Examples
-/dev:feature user-auth "Add user authentication system"
+/{category}:test example
 """
-        
-        command_path = os.path.join(commands_dir, "feature.md")
-        with open(command_path, "w") as f:
-            f.write(command_content)
+            
+            command_path = os.path.join(commands_dir, "test.md")
+            with open(command_path, "w") as f:
+                f.write(command_content)
             
         result = self.validator.validate_commands()
         self.assertTrue(result)
@@ -92,8 +96,8 @@ Creates a new feature branch and sets up the development environment.
         hooks_dir = os.path.join(self.test_dir, ".claude", "hooks")
         os.makedirs(hooks_dir, exist_ok=True)
         
-        hook_scripts = ["auto-format.sh", "command-approval.py", 
-                       "intelligent-automation.py", "security-check.py"]
+        hook_scripts = ["auto-format.sh", "intelligent-automation.py", 
+                       "security-check.py", "test-automation.py"]
         
         for script in hook_scripts:
             script_path = os.path.join(hooks_dir, script)
