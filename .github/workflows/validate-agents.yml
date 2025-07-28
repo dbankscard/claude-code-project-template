@@ -2,13 +2,20 @@ name: Validate Agents
 
 on:
   push:
+    branches: [ main ]
     paths:
       - 'template/.claude/agents/**'
       - 'template/.claude/commands/**'
+      - '.github/workflows/validate-agents.yml'
+      - 'tests/test_agents.py'
+      - 'tests/test_commands.py'
   pull_request:
     paths:
       - 'template/.claude/agents/**' 
       - 'template/.claude/commands/**'
+      - '.github/workflows/validate-agents.yml'
+      - 'tests/test_agents.py'
+      - 'tests/test_commands.py'
 
 jobs:
   validate:
