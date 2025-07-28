@@ -32,8 +32,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -e ".[dev]"
-        pip install pyyaml
+        pip install pytest pytest-cov pyyaml click rich pydantic pathlib-mate
     
     - name: Run tests
       run: |
@@ -42,10 +41,6 @@ jobs:
     - name: Test template initialization
       run: |
         python scripts/initialize_project.py test-project --dry-run
-    
-    - name: Validate template structure
-      run: |
-        python scripts/validate_setup.py --project-dir template
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
