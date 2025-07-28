@@ -89,7 +89,25 @@ class TestProjectInitializer(unittest.TestCase):
         initializer = ProjectInitializer(self.project_name, options)
         initializer.project_dir = project_path
         
-        initializer.init_git_repo()
+        # Mock subprocess to avoid actual git operations in CI
+        import subprocess
+        original_run = subprocess.run
+        
+        def mock_run(cmd, *args, **kwargs):
+            if cmd[0] == 'git' and cmd[1] == 'init':
+                # Create .git directory to simulate git init
+                os.makedirs(project_path / ".git", exist_ok=True)
+                return subprocess.CompletedProcess(cmd, 0)
+            elif cmd[0] == 'git':
+                # Mock other git commands
+                return subprocess.CompletedProcess(cmd, 0)
+            return original_run(cmd, *args, **kwargs)
+        
+        subprocess.run = mock_run
+        try:
+            initializer.init_git_repo()
+        finally:
+            subprocess.run = original_run
         
         git_dir = project_path / ".git"
         self.assertTrue(git_dir.exists())
