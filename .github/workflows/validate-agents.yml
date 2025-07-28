@@ -22,35 +22,12 @@ jobs:
       with:
         python-version: '3.12'
     
-    - name: Validate agent definitions
+    - name: Install dependencies
       run: |
-        echo "Validating agent markdown files..."
-        for agent in template/.claude/agents/*.md; do
-          echo "Checking $agent"
-          # Check required sections
-          grep -q "## Role" "$agent" || (echo "Missing ## Role section in $agent" && exit 1)
-          grep -q "## Expertise" "$agent" || (echo "Missing ## Expertise section in $agent" && exit 1)
-          grep -q "## Activation Triggers" "$agent" || (echo "Missing ## Activation Triggers section in $agent" && exit 1)
-        done
+        python -m pip install --upgrade pip
+        pip install pytest pyyaml
     
-    - name: Validate command definitions
+    - name: Validate agent and command definitions
       run: |
-        echo "Validating command markdown files..."
-        find template/.claude/commands -name "*.md" | while read cmd; do
-          echo "Checking $cmd"
-          # Check required sections
-          grep -q "## Usage" "$cmd" || (echo "Missing ## Usage section in $cmd" && exit 1)
-          grep -q "## Description" "$cmd" || (echo "Missing ## Description section in $cmd" && exit 1)
-          grep -q "## Examples" "$cmd" || (echo "Missing ## Examples section in $cmd" && exit 1)
-        done
-    
-    - name: Check command consistency
-      run: |
-        echo "Checking command naming consistency..."
-        find template/.claude/commands -type f -name "*.md" | while read file; do
-          filename=$(basename "$file" .md)
-          category=$(basename $(dirname "$file"))
-          # Check if file contains the expected command format
-          expected="/$category:$filename"
-          grep -q "# $expected" "$file" || (echo "Command mismatch in $file: expected $expected" && exit 1)
-        done
+        echo "Running comprehensive validation tests..."
+        python -m pytest tests/test_agents.py tests/test_commands.py -v
