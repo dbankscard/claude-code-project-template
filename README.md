@@ -1,5 +1,8 @@
 # Claude Code Project Template
 
+[![Test Template](https://github.com/dbankscard/claude-code-project-template/actions/workflows/test-template.yml/badge.svg)](https://github.com/dbankscard/claude-code-project-template/actions/workflows/test-template.yml)
+[![Validate Agents](https://github.com/dbankscard/claude-code-project-template/actions/workflows/validate-agents.yml/badge.svg)](https://github.com/dbankscard/claude-code-project-template/actions/workflows/validate-agents.yml)
+
 A comprehensive, production-ready template for Claude Code projects, meticulously designed based on Anthropic's knowledge base and best practices for AI-assisted development.
 
 ## Why This Template?
